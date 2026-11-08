@@ -43,7 +43,7 @@ ring.rotation.set(1.25, .2, .35);
 const planetGroup = new THREE.Group();
 planetGroup.add(planet, ring);
 sky.add(planetGroup);
-const PLANET_POS = [[-150, 40, -330], [170, 55, -320], [-120, 90, -340], [140, 30, -330], [-170, 60, -300], [120, 80, -340], [-140, 25, -320], [0, 70, -360]];
+const PLANET_POS = [[-150, 40, -330], [170, 55, -320], [-120, 90, -340], [140, 30, -330], [-170, 60, -300], [120, 80, -340], [-140, 25, -320], [160, 45, -310], [0, 70, -360]];
 
 /** Recolours the sky, fog and planet for a level. */
 export function setSkyTheme(li, hue) {

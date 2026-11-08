@@ -32,6 +32,7 @@ button{font-family:inherit}
 .bar{height:12px;border-radius:6px;background:#ffffff18;overflow:hidden}
 .bar i{display:block;height:100%;width:0;border-radius:6px}
 #spdBar{background:linear-gradient(90deg,var(--cyan),#9b7bff)}
+#spdBar.boost{background:linear-gradient(90deg,#9b7bff,var(--cyan),#ffffff);box-shadow:0 0 10px var(--cyan)}
 #fuelBar{background:var(--mint)}
 #fuelBar.low{background:var(--red)}
 
@@ -46,7 +47,8 @@ button{font-family:inherit}
 .card h1{font-family:var(--display);font-weight:400;font-size:clamp(34px,7vw,50px);line-height:1.05;text-align:center;background:linear-gradient(180deg,#fff,var(--cyan));-webkit-background-clip:text;background-clip:text;color:transparent}
 .card h2{font-family:var(--display);font-weight:400;font-size:30px;text-align:center}
 .card p{color:var(--muted);text-align:center;margin-top:6px;line-height:1.5}
-.levels{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:18px}
+/* Always a 3x3 grid for the 9 levels */
+.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:18px}
 .lv{font-family:var(--display);font-size:17px;text-align:left;color:var(--text);background:var(--panel-2);border:2px solid #ffffff1f;border-radius:12px;padding:10px 12px;cursor:pointer;line-height:1.25}
 .lv small{display:block;font-family:var(--body);font-size:13px;color:var(--muted)}
 .lv.sel{border-color:var(--sun);box-shadow:0 0 0 2px #ffc23f55}
@@ -69,6 +71,10 @@ button{font-family:inherit}
 .tb.small{width:56px;height:52px;font-size:20px}
 .tb.jump{width:92px;height:92px;border-radius:50%;font-size:20px;background:#ffc23f44;border-color:#ffc23faa}
 .tb.on{background:#ffffff55}
+@media (max-width:440px){
+  .lv{font-size:14px;padding:8px}
+  .lv small{font-size:11px}
+}
 @media (pointer:coarse){
   .pad{display:flex}
   .gauges{bottom:auto;top:56px;width:min(300px,calc(100% - 32px));padding:6px 12px;font-size:13px}

@@ -1,7 +1,7 @@
 // Game flow: modes (menu / play / pause / dead / clear), level start, death,
 // finish, and turning input into actions. Connects the world simulation to
 // rendering, sound and UI.
-import { FIXED_DT, BOOST_MUL } from './config.js';
+import { FIXED_DT } from './config.js';
 import { LEVELS } from './data/levels.js';
 import { makeLevel } from './world/generator.js';
 import { setTrack } from './world/track.js';
@@ -218,8 +218,8 @@ export function update(dt) {
   }
 }
 
-/** HUD values for the frame. */
+/** HUD values for the frame. Speed is 1 at the normal top speed; boost goes past it. */
 export function hudValues() {
   const lv = G.level;
-  return [P.s / lv.endS, G.runTime, P.vz / (lv.maxV * BOOST_MUL), P.fuel];
+  return [P.s / lv.endS, G.runTime, P.vz / lv.maxV, P.fuel, P.boost > 0];
 }

@@ -1,4 +1,4 @@
-import { STEP, LAT, ACC, BRK, JUMP, CRASH, SLOW_V, REV_V, BOOST_MUL, PAD_H } from '../config.js';
+import { STEP, LAT, ACC, BRK, JUMP, CRASH, SLOW_V, REV_V, BOOST_MUL, PAD_H, EMPTY_DECEL } from '../config.js';
 import { track, footprint, surfaceType } from './track.js';
 
 // Ship simulation. Pure logic: it never touches rendering, sound or the DOM.
@@ -61,11 +61,11 @@ export function step(P, K, lv, dt, ev = {}) {
     if (P.vz > 0) { P.vz = Math.max(0, P.vz - BRK * dt); P.stopT = 0; }
     else if ((P.stopT += dt) > .35) P.vz = Math.max(-REV_V, P.vz - ACC * dt);
   } else P.stopT = 0;
-  if (P.fuel <= 0) P.vz = P.vz > 0 ? Math.max(0, P.vz - 5 * dt) : 0;
+  if (P.fuel <= 0) P.vz = P.vz > 0 ? Math.max(0, P.vz - EMPTY_DECEL * dt) : 0;
   if (P.vz > cap) P.vz = Math.max(cap, P.vz - (onSlow ? 45 : 22) * dt);
   if (!K.down && P.vz < 0) P.vz = Math.min(0, P.vz + BRK * dt);
   if (P.vz > 0.01) P.started = true;
-  P.fuel = Math.max(0, P.fuel - Math.abs(P.vz) * dt / lv.tankDist * 100);
+  P.fuel = Math.max(0, P.fuel - Math.abs(P.vz) * dt / lv.tank * 100);
 
   // Steering (less grip in the air)
   const steer = (K.right ? 1 : 0) - (K.left ? 1 : 0);

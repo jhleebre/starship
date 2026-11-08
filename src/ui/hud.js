@@ -6,11 +6,12 @@ export const fmt = t => t === undefined ? '—' : t.toFixed(2);
 
 const els = { prog: $('prog'), time: $('timeTxt'), spd: $('spdBar'), fuel: $('fuelBar') };
 
-/** progress 0..1, speed 0..1, fuel 0..100 */
-export function updateHud(progress, time, speed, fuel) {
+/** progress 0..1, speed 0..1 (top speed = 1), fuel 0..100, boosting */
+export function updateHud(progress, time, speed, fuel, boosting) {
   els.prog.style.width = Math.min(100, progress * 100) + '%';
   els.time.textContent = fmt(time);
   els.spd.style.width = Math.min(100, Math.max(0, speed) * 100) + '%';
+  els.spd.classList.toggle('boost', boosting && speed > 1);
   els.fuel.style.width = fuel + '%';
   els.fuel.classList.toggle('low', fuel < 25);
 }

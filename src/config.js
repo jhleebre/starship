@@ -15,6 +15,7 @@ export const CRASH = 14;     // hitting a wall faster than this explodes
 export const SLOW_V = 7;     // speed cap on slow tiles
 export const REV_V = 6;      // slow reverse so a stalled ship can back up for another run-up
 export const BOOST_MUL = 1.35;
+export const EMPTY_DECEL = 12; // slowdown once the tank is empty (coasts about 25-40 units)
 export const WALL_H = 2.4;   // just above a normal jump; walls are see-through so the road ahead stays visible
 export const PAD_H = 5.2;    // jump pads launch to the same height on every planet
 

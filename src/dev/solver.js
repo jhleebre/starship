@@ -20,17 +20,20 @@ export function applyAction(K, a) {
 }
 
 /**
- * Searches for a way through level li.
+ * Searches for a way through level li. opts.noFuel turns fuel tiles into plain
+ * floor, to check that a level really needs its fuel.
  * Success: {ok:true, actions, time, fuel}; actions are applied one per TICKS_PER_ACTION physics steps.
  * Failure: {ok:false, far, endS, lastDeath, near}.
  */
-export function solveLevel(li) {
+export function solveLevel(li, opts = {}) {
   const lv = makeLevel(li);
+  if (opts.noFuel) lv.rows = lv.rows.map(r => r.replaceAll('f', '#'));
   setTrack(lv);
   const P = createPlayer(), K = {};
   resetPlayer(P);
   let dead = null, won = false;
   const ev = { die: r => { dead = r; P.dead = true; }, win: () => { won = true; } };
+  const fuelWorth = Number.isFinite(lv.tank) ? lv.tank * .4 : 2;
   const pathOf = n => { const out = []; for (; n; n = n.parent) out.push(n.a); return out.reverse(); };
 
   // Beam entries remember how they got there as a linked list of actions
@@ -47,8 +50,10 @@ export function solveLevel(li) {
         if (won) return { li, ok: true, actions: pathOf({ a, parent: node }), time: (layer + 1) * TICKS_PER_ACTION * FIXED_DT, fuel: P.fuel };
         if (dead) { lastDeath = { reason: dead, s: P.s }; continue; }
         const key = [Math.round(P.x * 3), Math.round(P.s * 2), Math.round(P.vz / 2), Math.round(P.y * 2), P.onGround ? 1 : 0].join();
-        // Progress first, but penalise ships that are already falling or off the side
-        const score = P.s + P.fuel * .02 - (P.y < -.3 ? 500 : 0) - (Math.abs(P.x) > 3.4 ? 300 : 0);
+        // Progress first, plus part of the remaining fuel range (so ships that refuel
+        // are not pruned by ones that skipped fuel and are a little further ahead),
+        // and penalise ships that are already falling or off the side
+        const score = P.s + P.fuel / 100 * fuelWorth - (P.y < -.3 ? 500 : 0) - (Math.abs(P.x) > 3.4 ? 300 : 0);
         const o = next.get(key);
         if (!o || o.score < score) next.set(key, { score, st: { ...P }, node: { a, parent: node } });
       }
@@ -59,7 +64,7 @@ export function solveLevel(li) {
     }
     const count = {};
     beam = [...next.values()].sort((a, b) => b.score - a.score).filter(o => {
-      const b = Math.floor(o.st.vz / 5) + '_' + (o.st.onGround ? 1 : 0) + '_' + Math.round(o.st.y);
+      const b = Math.floor(o.st.vz / 5) + '_' + (o.st.onGround ? 1 : 0) + '_' + Math.round(o.st.y) + '_' + Math.floor(o.st.fuel / 34);
       return (count[b] = (count[b] || 0) + 1) <= PER_BUCKET;
     }).slice(0, BEAM);
     far = Math.max(far, beam[0].st.s);

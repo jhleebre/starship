@@ -46,7 +46,5 @@ export function buildRows(li) {
 /** Level settings plus the values derived from its generated course. */
 export function makeLevel(li) {
   const { rows, endRow } = buildRows(li);
-  const level = { ...LEVELS[li], index: li, rows, endRow, endS: endRow * TL };
-  level.tankDist = rows.length * TL * level.tank;
-  return level;
+  return { ...LEVELS[li], index: li, rows, endRow, endS: endRow * TL };
 }
