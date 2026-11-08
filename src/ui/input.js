@@ -2,11 +2,11 @@
 // action means in its current mode.
 //   held directions: 'left' 'right' 'up' 'down'
 //   presses:         'primary' (Space / touch jump), 'confirm' (Enter),
-//                    'restart' (R), 'pause' (Esc / P), 'mute' (M)
+//                    'restart' (R), 'pause' (Esc / P), 'mute' (M), 'music' (N)
 const KEYMAP = {
   ArrowLeft: 'left', KeyA: 'left', ArrowRight: 'right', KeyD: 'right',
   ArrowUp: 'up', KeyW: 'up', ArrowDown: 'down', KeyS: 'down',
-  Space: 'primary', Enter: 'confirm', KeyR: 'restart', Escape: 'pause', KeyP: 'pause', KeyM: 'mute',
+  Space: 'primary', Enter: 'confirm', KeyR: 'restart', Escape: 'pause', KeyP: 'pause', KeyM: 'mute', KeyN: 'music',
 };
 
 /**
@@ -17,7 +17,7 @@ export function bindInput({ onAction, onBlur }) {
   window.addEventListener('keydown', e => {
     const a = KEYMAP[e.code];
     if (!a) return;
-    if (a !== 'pause' && a !== 'mute') e.preventDefault();
+    if (a !== 'pause' && a !== 'mute' && a !== 'music') e.preventDefault();
     onAction(a, true, e.repeat);
   });
   window.addEventListener('keyup', e => {

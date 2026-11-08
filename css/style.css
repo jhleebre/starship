@@ -74,6 +74,11 @@ button{font-family:inherit}
 @media (max-width:440px){
   .lv{font-size:14px;padding:8px}
   .lv small{font-size:11px}
+  /* Keep the HUD chips and the three buttons on one line */
+  .hud,.hud .row{gap:5px}
+  .chip{font-size:13px;padding:5px 8px}
+  .chip small{display:none}
+  .iconBtn{font-size:12px;padding:5px 7px}
 }
 @media (pointer:coarse){
   .pad{display:flex}

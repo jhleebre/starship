@@ -4,11 +4,13 @@ import { prefs } from '../util/storage.js';
 // The context starts on the first user gesture (browsers block autoplay).
 export const sound = {
   ctx: null, out: null, muted: prefs.muted, eng: null, engGain: null, engFilter: null,
+  onRunning: null, // called once audio is actually running (the game starts the music then)
 
   init() {
     if (this.ctx) { if (this.ctx.state === 'suspended') this.ctx.resume(); return; }
     try {
       const C = window.AudioContext || window.webkitAudioContext; this.ctx = new C();
+      this.ctx.addEventListener('statechange', () => { if (this.ctx.state === 'running' && this.onRunning) this.onRunning(); });
       this.out = this.ctx.createGain(); this.out.gain.value = this.muted ? 0 : .5; this.out.connect(this.ctx.destination);
       // Engine drone: sawtooth through a low-pass filter, pitch follows speed
       this.eng = this.ctx.createOscillator(); this.eng.type = 'sawtooth'; this.eng.frequency.value = 50;

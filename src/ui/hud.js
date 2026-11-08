@@ -18,6 +18,7 @@ export function updateHud(progress, time, speed, fuel, boosting) {
 
 export function setLevelChip(text) { $('lvChip').textContent = text; }
 export function setMuteLabel(muted) { $('muteBtn').textContent = muted ? '소리 끔' : '소리 켬'; }
+export function setMusicLabel(on) { const b = $('musicBtn'); b.textContent = on ? '음악 켬' : '음악 끔'; b.setAttribute('aria-pressed', on); }
 
 let bannerT = null;
 export function showBanner(title, sub) {
@@ -63,8 +64,9 @@ export function renderLevels(levels, save, sel, onPick) {
 }
 
 /** Wires the HUD buttons. */
-export function bindHud({ onMenu, onMute, onResultMenu }) {
+export function bindHud({ onMenu, onMute, onMusic, onResultMenu }) {
   $('menuBtn').onclick = onMenu;
   $('muteBtn').onclick = onMute;
+  $('musicBtn').onclick = e => { onMusic(); e.currentTarget.blur(); };
   $('resMenu').onclick = onResultMenu;
 }

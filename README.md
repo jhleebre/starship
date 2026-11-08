@@ -21,7 +21,8 @@
 | `스페이스` | 점프 |
 | `R` | 다시 시작 |
 | `Esc` 또는 `P` | 일시정지 · 메뉴 |
-| `M` | 소리 켜기/끄기 |
+| `M` | 모든 소리 켜기/끄기 |
+| `N` | 배경음악 켜기/끄기 |
 
 터치 기기에서는 화면 아래 버튼으로 조작합니다.
 
@@ -86,6 +87,7 @@ src/
     effects.js          파티클, 폭발 파편, 효과 프리셋
     cameraRig.js        추적 카메라
   audio/sound.js        WebAudio로 합성하는 효과음
+  audio/music.js        WebAudio로 합성·예약 재생하는 배경음악 (단계가 오를수록 악기가 늘고 빨라짐)
   ui/hud.js             HUD, 배너, 메뉴, 결과 카드
   ui/input.js           키보드·터치 → 동작 이름
   util/storage.js       기록 저장 (localStorage)
@@ -98,7 +100,7 @@ tools/
   check-levels.mjs      Node에서 확인 (`npm run check-levels`)
 ```
 
-이미지·소리 파일은 없습니다. 텍스처는 `render/textures.js`에서 캔버스로 그리고, 소리는 `audio/sound.js`에서 합성합니다.
+이미지·소리 파일은 없습니다. 텍스처는 `render/textures.js`에서 캔버스로 그리고, 효과음과 배경음악은 `audio/`에서 합성합니다.
 
 ## 코스 수정하기
 

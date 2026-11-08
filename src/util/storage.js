@@ -13,4 +13,6 @@ export function writeSave() { LS.set(SAVE_KEY, save); }
 export const prefs = {
   get muted() { return LS.get(SAVE_KEY + '-mute', false); },
   set muted(v) { LS.set(SAVE_KEY + '-mute', v); },
+  get music() { return LS.get(SAVE_KEY + '-music', true); },
+  set music(v) { LS.set(SAVE_KEY + '-music', v); },
 };

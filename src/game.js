@@ -8,6 +8,7 @@ import { setTrack } from './world/track.js';
 import { createPlayer, resetPlayer, requestJump, step } from './world/physics.js';
 import { save, writeSave } from './util/storage.js';
 import { sound } from './audio/sound.js';
+import { music } from './audio/music.js';
 import { setSkyTheme } from './render/sky.js';
 import { buildTrackMesh, gateGlow } from './render/trackMesh.js';
 import { setShipVisible } from './render/ship.js';
@@ -68,6 +69,10 @@ export function startLevel(i) {
   G.mode = 'play';
   hud.showBanner(`단계 ${i + 1}  ${G.level.name}`, G.level.sub);
   sound.init(); sound.engineOn(true);
+  // Retrying the same level keeps the music going; a new level starts it from the top
+  const sameLevel = music.playing && music.level === i;
+  music.setLevel(i);
+  if (!sameLevel) { music.stop(); music.start(true); }
 }
 
 function die(reason) {
@@ -93,7 +98,7 @@ function showDeath() {
 function win() {
   const lv = G.level, li = lv.index;
   G.mode = 'clear';
-  sound.engineOn(false); sound.win();
+  sound.engineOn(false); music.stop(); sound.win();
   // Fireworks over the finish gate
   for (let k = 0; k < 7; k++) setTimeout(() => {
     if (G.mode !== 'clear') return;
@@ -121,17 +126,17 @@ function win() {
 
 function togglePause() {
   if (G.mode === 'play') {
-    G.mode = 'pause'; sound.engineOn(false);
+    G.mode = 'pause'; sound.engineOn(false); music.stop();
     hud.showResult({
       title: '잠시 멈춤', sub: `단계 ${G.level.index + 1} · ${G.level.name}`,
       main: ['계속하기', resume], alt: ['다시 하기', () => startLevel(G.level.index)],
     });
   } else if (G.mode === 'pause') resume();
 }
-function resume() { hud.hideResult(); G.mode = 'play'; sound.engineOn(true); }
+function resume() { hud.hideResult(); G.mode = 'play'; sound.engineOn(true); music.start(); }
 
 export function openMenu() {
-  G.mode = 'menu'; sound.engineOn(false);
+  G.mode = 'menu'; sound.engineOn(false); music.stop();
   G.sel = Math.min(save.unlocked - 1, G.sel);
   hud.showMenu(LEVELS, save, G.sel, startLevel);
 }
@@ -145,11 +150,12 @@ const resultReady = () => G.mode === 'clear' || G.mode === 'pause' || (G.mode ==
 
 /** Input handler (see ui/input.js for action names). */
 export function onAction(a, down, repeat) {
-  if (down) sound.init();
+  if (down) wakeAudio();
   if (G.pilot) {
-    // Autoplay owns the controls; Esc hands them back, M still mutes
+    // Autoplay owns the controls; Esc hands them back, M and N still work
     if (down && a === 'pause' && G.pilotStop) G.pilotStop();
     else if (down && a === 'mute') hud.setMuteLabel(sound.toggleMute());
+    else if (down && a === 'music') toggleMusic();
     return;
   }
   if (a in K) {
@@ -181,6 +187,9 @@ export function onAction(a, down, repeat) {
     case 'mute':
       hud.setMuteLabel(sound.toggleMute());
       break;
+    case 'music':
+      toggleMusic();
+      break;
   }
 }
 
@@ -190,7 +199,14 @@ export function onBlur() {
 }
 
 export function onMenuButton() { if (G.mode === 'play') togglePause(); else openMenu(); }
-export function onMuteButton() { sound.init(); hud.setMuteLabel(sound.toggleMute()); }
+export function onMuteButton() { wakeAudio(); hud.setMuteLabel(sound.toggleMute()); }
+export function onMusicButton() { wakeAudio(); toggleMusic(); }
+
+function toggleMusic() { hud.setMusicLabel(music.toggle(G.mode === 'play' || G.mode === 'dead')); }
+/** First gesture: start audio, and the music if a run (e.g. autoplay) is already going. */
+function wakeAudio() { sound.init(); if (G.mode === 'play') music.start(); }
+// Audio can only start inside a user gesture; once it runs, start the music if a run is going (autoplay)
+sound.onRunning = () => { if (G.mode === 'play') music.start(); };
 
 // Fixed-step simulation so physics behaves the same at any frame rate
 let acc = 0;
@@ -205,6 +221,7 @@ export function update(dt) {
     if (n === 8) acc = 0;
     if (P.started && G.mode === 'play') G.runTime += dt;
     sound.engineSet(P.vz, K.up ? 1 : 0);
+    music.setDrive(P.vz / G.level.maxV);
   } else acc = 0;
 
   if (G.mode === 'dead' && G.deadTimer > 0) {

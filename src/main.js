@@ -7,6 +7,7 @@ import { updateEffects, fx } from './render/effects.js';
 import { updateCamera } from './render/cameraRig.js';
 import { animateIcons } from './render/textures.js';
 import { sound } from './audio/sound.js';
+import { music } from './audio/music.js';
 import { bindInput } from './ui/input.js';
 import * as hud from './ui/hud.js';
 import * as game from './game.js';
@@ -14,8 +15,9 @@ import * as game from './game.js';
 const { P, K, G } = game;
 
 bindInput({ onAction: game.onAction, onBlur: game.onBlur });
-hud.bindHud({ onMenu: game.onMenuButton, onMute: game.onMuteButton, onResultMenu: game.openMenu });
+hud.bindHud({ onMenu: game.onMenuButton, onMute: game.onMuteButton, onMusic: game.onMusicButton, onResultMenu: game.openMenu });
 hud.setMuteLabel(sound.muted);
+hud.setMusicLabel(music.enabled);
 game.initMenuBackground();
 resize();
 
