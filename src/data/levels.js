@@ -1,16 +1,18 @@
 // Level list. Each level is generated from SEGMENTS with a fixed seed.
 //   g          gravity            maxV       top speed (boost goes above it)
 //   segs       number of pieces   feats      segment features allowed; the last one is "new" here
-//   tank       distance a full tank lasts (Infinity = fuel never matters)
+//   tank       distance a full tank lasts
 //   fuelEvery  put a fuel strip every N pieces (0 = none)
 //   hue        colour theme for track and sky
-// Tanks are sized from the gaps between fuel strips: levels 3-5 forgive one missed
+// Levels 1-2 have no fuel strips; their tank is generous (a finish uses about
+// two thirds) so the gauge visibly drains without any risk.
+// From level 3 tanks are sized from the gaps between fuel strips: levels 3-5 forgive one missed
 // strip, from 6 on missing one in the wrong place is fatal. An empty ship barely
 // coasts and can't clear gaps, so the tank is the real range. Skipping all fuel
 // fails from level 3 on. Re-check with tools/check-levels after changes.
 export const LEVELS = [
-  { name: '첫 비행', sub: '틈은 뛰어넘고 벽은 피하세요', g: 30, maxV: 24, segs: 24, feats: ['base'], tank: Infinity, fuelEvery: 0, hue: .62 },
-  { name: '계단 구름', sub: '낮은 블록은 점프해서 올라타요', g: 30, maxV: 25, segs: 28, feats: ['base', 'blk'], tank: Infinity, fuelEvery: 0, hue: .78 },
+  { name: '첫 비행', sub: '틈은 뛰어넘고 벽은 피하세요', g: 30, maxV: 24, segs: 24, feats: ['base'], tank: 550, fuelEvery: 0, hue: .62 },
+  { name: '계단 구름', sub: '낮은 블록은 점프해서 올라타요', g: 30, maxV: 25, segs: 28, feats: ['base', 'blk'], tank: 620, fuelEvery: 0, hue: .78 },
   { name: '가속 터널', sub: '가속·감속 바닥 등장! 이제 초록 연료 칸을 챙기세요', g: 30, maxV: 26, segs: 30, feats: ['base', 'blk', 'spd'], tank: 240, fuelEvery: 6, hue: .52 },
   { name: '불꽃 지대', sub: '빨간 바닥에 닿으면 폭발합니다', g: 30, maxV: 26, segs: 32, feats: ['base', 'blk', 'spd', 'burn'], tank: 180, fuelEvery: 5, hue: .02 },
   { name: '도약대 기지', sub: '노란 도약대가 높이 띄워 줘요', g: 30, maxV: 27, segs: 32, feats: ['base', 'blk', 'spd', 'burn', 'jump'], tank: 140, fuelEvery: 4, hue: .12 },

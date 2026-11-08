@@ -33,7 +33,7 @@ export function solveLevel(li, opts = {}) {
   resetPlayer(P);
   let dead = null, won = false;
   const ev = { die: r => { dead = r; P.dead = true; }, win: () => { won = true; } };
-  const fuelWorth = Number.isFinite(lv.tank) ? lv.tank * .4 : 2;
+  const fuelWorth = lv.tank * .4;
   const pathOf = n => { const out = []; for (; n; n = n.parent) out.push(n.a); return out.reverse(); };
 
   // Beam entries remember how they got there as a linked list of actions

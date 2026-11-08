@@ -12,8 +12,8 @@ export function checkLevels(list = LEVELS.map((_, i) => i), log = console.log) {
     const name = `${li + 1}. ${LEVELS[li].name}`;
     if (r.ok) {
       let line = `✔ ${name}  cleared in ${r.time.toFixed(1)}s (fuel left ${r.fuel.toFixed(0)}%)`;
-      // Levels with a finite tank should be impossible without picking up fuel
-      if (Number.isFinite(LEVELS[li].tank)) {
+      // Levels with fuel strips should be impossible without picking them up
+      if (LEVELS[li].fuelEvery > 0) {
         const nf = solveLevel(li, { noFuel: true });
         if (nf.ok) { failed++; line += `  ✘ also clearable without fuel (fuel left ${nf.fuel.toFixed(0)}%)`; }
         else line += `  · without fuel: stuck at ${Math.round(nf.far / nf.endS * 100)}% (${nf.lastDeath ? nf.lastDeath.reason : '?'})`;
