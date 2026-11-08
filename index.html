@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>스타쉽 질주</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="cv"></canvas>
+  <div class="progress"><i id="prog"></i></div>
+  <div class="hud">
+    <div class="row"><div class="chip" id="lvChip">단계 1</div></div>
+    <div class="row">
+      <div class="chip"><small>시간</small><span id="timeTxt">0.00</span></div>
+      <button class="iconBtn" id="muteBtn" title="소리 (M)">소리 켬</button>
+      <button class="iconBtn" id="menuBtn" title="메뉴 (Esc)">메뉴</button>
+    </div>
+  </div>
+  <div class="gauges">
+    <span>속도</span><div class="bar"><i id="spdBar"></i></div>
+    <span>연료</span><div class="bar"><i id="fuelBar"></i></div>
+  </div>
+  <div class="banner" id="banner"><b id="bannerTitle"></b><span id="bannerSub"></span></div>
+
+  <div class="overlay show" id="menu">
+    <div class="card">
+      <h1>스타쉽 질주</h1>
+      <p>우주에 떠 있는 길을 따라 끝까지 날아가세요.<br>틈은 뛰어넘고, 벽은 피하고, 연료가 떨어지기 전에 도착해야 합니다.</p>
+      <div class="levels" id="levels"></div>
+      <div class="legend">
+        <span><i style="background:#3fe4ff"></i>가속</span>
+        <span><i style="background:#7a4a2a"></i>감속</span>
+        <span><i style="background:#36c46a"></i>연료</span>
+        <span><i style="background:#ff4a3a"></i>불바닥</span>
+        <span><i style="background:#ffd23f"></i>도약대</span>
+      </div>
+      <div class="keys">
+        <span><kbd>←</kbd><kbd>→</kbd></span><span>좌우로 움직이기</span>
+        <span><kbd>↑</kbd><kbd>↓</kbd></span><span>가속 / 감속 (멈춘 상태에서 ↓는 후진)</span>
+        <span><kbd>스페이스</kbd></span><span>점프 (메뉴에서는 선택한 단계 시작)</span>
+        <span><kbd>R</kbd> <kbd>Esc</kbd> <kbd>M</kbd></span><span>다시 시작 · 메뉴 · 소리</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="result">
+    <div class="card">
+      <h2 id="resTitle"></h2>
+      <p id="resSub"></p>
+      <div class="stat" id="resStat"></div>
+      <div class="btns">
+        <button class="btn" id="resMain"></button>
+        <button class="btn alt" id="resAlt"></button>
+        <button class="btn alt" id="resMenu">메뉴</button>
+      </div>
+      <p style="font-size:14px;margin-top:14px">스페이스: <span id="resHint"></span></p>
+    </div>
+  </div>
+
+  <div class="pad" id="pad">
+    <div class="grp">
+      <button class="tb" data-k="left">◀</button>
+      <button class="tb" data-k="right">▶</button>
+    </div>
+    <div class="grp">
+      <div class="col">
+        <button class="tb small" data-k="up">▲</button>
+        <button class="tb small" data-k="down">▼</button>
+      </div>
+      <button class="tb jump" data-k="jump">점프</button>
+    </div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js" } }
+</script>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

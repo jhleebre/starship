@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>Level check</title>
+<style>body{background:#0b0d22;color:#e8ebff;font:14px/1.5 ui-monospace,Menlo,monospace;padding:16px}pre{white-space:pre-wrap}</style>
+</head>
+<body>
+<p>Checking every level with the game's physics… (add <code>?levels=3,5</code> for specific ones)</p>
+<pre id="out"></pre>
+<script type="module">
+import { LEVELS } from '../src/data/levels.js';
+import { checkLevels } from './level-check.js';
+
+const out = document.getElementById('out');
+const q = new URLSearchParams(location.search).get('levels');
+const list = q ? q.split(',').map(n => Number(n) - 1).filter(n => n >= 0 && n < LEVELS.length) : LEVELS.map((_, i) => i);
+// Run one level per tick so the page shows progress
+(async () => {
+  let failed = 0;
+  for (const li of list) {
+    await new Promise(r => setTimeout(r, 0));
+    failed += checkLevels([li], line => { out.textContent += line + '\n'; });
+  }
+  out.textContent += failed ? `\n${failed} level(s) failed` : '\nAll levels can be finished.';
+  document.title = failed ? 'Level check: FAILED' : 'Level check: OK';
+})();
+</script>
+</body>
+</html>

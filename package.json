@@ -1,0 +1,10 @@
+{
+  "name": "starship-run",
+  "private": true,
+  "description": "스타쉽 질주 — 3D space road racing game for the browser",
+  "type": "module",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "check-levels": "node tools/check-levels.mjs"
+  }
+}

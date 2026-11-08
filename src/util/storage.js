@@ -1,0 +1,16 @@
+// localStorage wrapper that never throws (private mode, blocked storage, ...).
+export const LS = {
+  get(k, d) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* ignore */ } },
+};
+
+const SAVE_KEY = 'starship-run-v1';
+
+/** Progress: how many levels are unlocked and best times per level index. */
+export const save = LS.get(SAVE_KEY, { unlocked: 1, best: {} });
+export function writeSave() { LS.set(SAVE_KEY, save); }
+
+export const prefs = {
+  get muted() { return LS.get(SAVE_KEY + '-mute', false); },
+  set muted(v) { LS.set(SAVE_KEY + '-mute', v); },
+};
